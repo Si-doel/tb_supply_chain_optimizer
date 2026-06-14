@@ -1,97 +1,162 @@
 @extends('layouts.app')
 
 @section('page.header')
-<div class="page-header">
-    <h4 class="page-title">Product Transactions</h4>
+    <div class="page-header">
+        <h4 class="page-title">Product Transactions</h4>
 
-    <ul class="breadcrumbs">
-        <li class="nav-home">
-            <a href="{{ route('dashboard') }}">
-                <i class="icon-home"></i>
-            </a>
-        </li>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="{{ route('dashboard') }}">
+                    <i class="icon-home"></i>
+                </a>
+            </li>
 
-        <li class="separator">
-            <i class="icon-arrow-right"></i>
-        </li>
+            <li class="separator">
+                <i class="icon-arrow-right"></i>
+            </li>
 
-        <li class="nav-item">
-            <a href="#">Transactions</a>
-        </li>
-
-        <li class="separator">
-            <i class="icon-arrow-right"></i>
-        </li>
-
-        <li class="nav-item">
-            <a href="#">Product Transactions</a>
-        </li>
-    </ul>
-</div>
+            <li class="nav-item">
+                <a href="#">Transactions</a>
+            </li>
+        </ul>
+    </div>
 @endsection
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Daftar Transaksi Stok</h4>
-        <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i> Catat Transaksi
-        </a>
+
+    <div class="card">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+
+            <h4 class="card-title">
+                Transaction List
+            </h4>
+
+            <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">
+
+                <i class="fas fa-plus"></i>
+                Add Transaction
+
+            </a>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($transactions->isEmpty())
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    No transaction data available.
+                </div>
+            @else
+                <div class="table-responsive">
+
+                    <table class="table table-striped table-hover">
+
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Date</th>
+                                <th>Product Code</th>
+                                <th>Product Name</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Notes</th>
+                                <th style="width:100px;">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach ($transactions as $transaction)
+                                <tr>
+
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
+
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($transaction->trx_date)->format('d M Y') }}
+                                    </td>
+
+                                    <td>
+                                        <strong>
+                                            {{ $transaction->product->prd_kode ?? '-' }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {{ $transaction->product->prd_nama ?? '-' }}
+                                    </td>
+
+                                    <td>
+
+                                        @if ($transaction->trx_type == 'IN')
+                                            <span class="badge badge-success">
+                                                Stock In
+                                            </span>
+                                        @else
+                                            <span class="badge badge-danger">
+                                                Stock Out
+                                            </span>
+                                        @endif
+
+                                    </td>
+
+                                    <td>
+                                        {{ number_format($transaction->trx_qty) }}
+                                    </td>
+
+                                    <td style="max-width:250px;">
+
+                                        {{ \Illuminate\Support\Str::limit($transaction->trx_notes, 40) }}
+
+                                    </td>
+
+                                    <td style="white-space: nowrap;">
+
+                                        <a href="{{ route('transactions.edit', $transaction->trx_id) }}"
+                                            class="btn btn-warning btn-sm">
+
+                                            <i class="fas fa-edit"></i>
+
+                                        </a>
+
+                                        <form action="{{ route('transactions.destroy', $transaction->trx_id) }}"
+                                            method="POST" class="d-inline">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Delete this transaction?')">
+
+                                                <i class="fas fa-trash"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            @endif
+
+        </div>
+
     </div>
-    <div class="card-body">
-        @if(count($transactions) == 0)
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> Belum ada data transaksi. Klik tombol "Catat Transaksi" untuk menambahkan data baru.
-            </div>
-        @else
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode Produk</th>
-                            <th>Nama Produk</th>
-                            <th>Tipe Transaksi</th>
-                            <th>Qty</th>
-                            <th>Keterangan</th>
-                            <th>Tanggal & Waktu</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($transactions as $key => $transaction)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td><strong>{{ $transaction->product_code }}</strong></td>
-                            <td>{{ $transaction->product_name }}</td>
-                            <td>
-                                @if($transaction->movement_type == 'IN')
-                                    <span class="badge badge-success">IN (Masuk)</span>
-                                @else
-                                    <span class="badge badge-danger">OUT (Keluar)</span>
-                                @endif
-                            </td>
-                            <td>{{ $transaction->qty_change }} unit</td>
-                            <td>{{ $transaction->description }}</td>
-                            <td>{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('d-m-Y H:i') }}</td>
-                            <td>
-                                <a href="{{ route('transactions.edit', $transaction->movement_id) }}" class="btn btn-sm btn-warning" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i> Edit
-                                </a>
-                                <form action="{{ route('transactions.destroy', $transaction->movement_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Apakah Anda yakin?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
-    </div>
-</div>
+
 @endsection

@@ -31,65 +31,145 @@
 @endsection
 
 @section('content')
+
 <div class="card">
+
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Daftar Produk</h4>
-        <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i> Tambah Produk
+
+        <h4 class="card-title mb-0">
+            Product List
+        </h4>
+
+        <a href="{{ route('products.create') }}"
+           class="btn btn-primary btn-sm">
+
+            <i class="fas fa-plus"></i>
+            Add Product
+
         </a>
+
     </div>
+
     <div class="card-body">
-        @if(count($products) == 0)
+
+        @if($products->isEmpty())
+
             <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> Belum ada data produk. Klik tombol "Tambah Produk" untuk menambahkan data baru.
+                <i class="fas fa-info-circle"></i>
+                No product data available.
             </div>
+
         @else
+
             <div class="table-responsive">
+
                 <table class="table table-striped table-hover">
+
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kode Produk</th>
-                            <th>Nama Produk</th>
-                            <th>Kategori</th>
-                            <th>Harga Beli</th>
-                            <th>Harga Jual</th>
+                            <th>Product Code</th>
+                            <th>Product Name</th>
                             <th>Supplier</th>
-                            <th>Satuan</th>
-                            <th>Aksi</th>
+                            <th>Current Stock</th>
+                            <th>Minimum Stock</th>
+                            <th>Status</th>
+                            <th width="150">Action</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        @foreach($products as $key => $product)
+
+                        @foreach($products as $product)
+
                         <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td><strong>{{ $product->product_code }}</strong></td>
-                            <td>{{ $product->product_name }}</td>
-                            <td>{{ $product->category }}</td>
-                            <td>Rp {{ number_format($product->purchase_price, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($product->selling_price, 0, ',', '.') }}</td>
+
                             <td>
-                                <span class="badge badge-info">Supplier #{{ $product->supplier_id }}</span>
+                                {{ $loop->iteration }}
                             </td>
-                            <td>{{ $product->unit }}</td>
+
                             <td>
-                                <a href="{{ route('products.edit', $product->product_id) }}" class="btn btn-sm btn-warning" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i> Edit
+                                <strong>
+                                    {{ $product->prd_kode }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ $product->prd_nama }}
+                            </td>
+
+                            <td>
+                                {{ $product->supplier->sup_nama ?? '-' }}
+                            </td>
+
+                            <td>
+                                {{ $product->prd_stok }}
+                            </td>
+
+                            <td>
+                                {{ $product->stok_min }}
+                            </td>
+
+                            <td>
+
+                                @if($product->prd_stok <= $product->stok_min)
+
+                                    <span class="badge badge-danger">
+                                        Reorder Needed
+                                    </span>
+
+                                @else
+
+                                    <span class="badge badge-success">
+                                        In Stock
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+                            <td>
+
+                                <a href="{{ route('products.edit', $product->prd_id) }}"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="fas fa-edit"></i>
+
                                 </a>
-                                <form action="{{ route('products.destroy', $product->product_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Apakah Anda yakin?')">
+
+                                <form action="{{ route('products.destroy', $product->prd_id) }}"
+                                      method="POST"
+                                      style="display:inline-block;">
+
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
-                                        <i class="fas fa-trash"></i> Hapus
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Delete this product?')">
+
+                                        <i class="fas fa-trash"></i>
+
                                     </button>
+
                                 </form>
+
                             </td>
+
                         </tr>
+
                         @endforeach
+
                     </tbody>
+
                 </table>
+
             </div>
+
         @endif
+
     </div>
+
 </div>
+
 @endsection

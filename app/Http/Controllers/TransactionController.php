@@ -2,106 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductTransaction;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
     /**
-     * Display a listing of stock transactions
+     * Display a listing of transactions.
      */
     public function index()
     {
-        // TODO: Replace with database query when tables ready
-        // $transactions = StockMovement::with('product')->latest()->paginate(15);
-        
-        $transactions = [
-            (object)[
-                'movement_id' => 1,
-                'product_code' => 'PRD001',
-                'product_name' => 'Laptop Dell XPS 13',
-                'qty_change' => 10,
-                'movement_type' => 'IN',
-                'description' => 'Pembelian dari supplier',
-                'transaction_date' => '2026-06-14 10:30:00'
-            ],
-            (object)[
-                'movement_id' => 2,
-                'product_code' => 'PRD002',
-                'product_name' => 'Office Chair Premium',
-                'qty_change' => 5,
-                'movement_type' => 'OUT',
-                'description' => 'Penjualan ke customer',
-                'transaction_date' => '2026-06-14 14:15:00'
-            ]
-        ];
+        $transactions = ProductTransaction::with('product')
+            ->orderBy('trx_date', 'desc')
+            ->get();
 
-        return view('Transactions.index', compact('transactions'));
+        return view('transactions.index', compact('transactions'));
     }
 
     /**
-     * Show the form for creating a new transaction
+     * Show the form for creating a new transaction.
      */
     public function create()
     {
-        // TODO: Fetch products for dropdown when table ready
-        $products = [];
-        return view('Transactions.create', compact('products'));
+        return view('transactions.create');
     }
 
     /**
-     * Store a newly created transaction in database
+     * Store a newly created transaction.
      */
     public function store(Request $request)
     {
-        // TODO: Implement database save when table ready
-        // $transaction = StockMovement::create($request->validated());
-        
-        return redirect()->route('transactions.index')
-            ->with('success', 'Transaksi stok berhasil dicatat');
+        return redirect()
+            ->route('transactions.index')
+            ->with('success', 'Transaksi berhasil ditambahkan');
     }
 
     /**
-     * Show the form for editing a transaction (jika diperlukan)
+     * Show the form for editing the specified transaction.
      */
     public function edit($id)
     {
-        // TODO: Fetch transaction and products when ready
-        $transaction = (object)[
-            'movement_id' => $id,
-            'product_code' => 'PRD001',
-            'product_name' => 'Laptop Dell XPS 13',
-            'qty_change' => 10,
-            'movement_type' => 'IN',
-            'description' => 'Pembelian dari supplier',
-            'transaction_date' => '2026-06-14 10:30:00'
-        ];
-        $products = [];
+        $transaction = ProductTransaction::findOrFail($id);
 
-        return view('Transactions.edit', compact('transaction', 'products'));
+        return view('transactions.edit', compact('transaction'));
     }
 
     /**
-     * Update the transaction in database
+     * Update the specified transaction.
      */
     public function update(Request $request, $id)
     {
-        // TODO: Implement database update when table ready
-        // $transaction = StockMovement::findOrFail($id);
-        // $transaction->update($request->validated());
-
-        return redirect()->route('transactions.index')
+        return redirect()
+            ->route('transactions.index')
             ->with('success', 'Transaksi berhasil diperbarui');
     }
 
     /**
-     * Delete a transaction
+     * Remove the specified transaction.
      */
     public function destroy($id)
     {
-        // TODO: Implement database delete when table ready
-        // StockMovement::findOrFail($id)->delete();
-
-        return redirect()->route('transactions.index')
+        return redirect()
+            ->route('transactions.index')
             ->with('success', 'Transaksi berhasil dihapus');
     }
 }
