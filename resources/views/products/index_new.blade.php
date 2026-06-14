@@ -2,7 +2,7 @@
 
 @section('page.header')
 <div class="page-header">
-    <h4 class="page-title">Product Transactions</h4>
+    <h4 class="page-title">Products</h4>
 
     <ul class="breadcrumbs">
         <li class="nav-home">
@@ -16,7 +16,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="#">Transactions</a>
+            <a href="#">Master Data</a>
         </li>
 
         <li class="separator">
@@ -24,7 +24,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="#">Product Transactions</a>
+            <a href="#">Products</a>
         </li>
     </ul>
 </div>
@@ -33,15 +33,15 @@
 @section('content')
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Daftar Transaksi Stok</h4>
-        <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i> Catat Transaksi
+        <h4 class="card-title">Daftar Produk</h4>
+        <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Tambah Produk
         </a>
     </div>
     <div class="card-body">
-        @if(count($transactions) == 0)
+        @if(count($products) == 0)
             <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> Belum ada data transaksi. Klik tombol "Catat Transaksi" untuk menambahkan data baru.
+                <i class="fas fa-info-circle"></i> Belum ada data produk. Klik tombol "Tambah Produk" untuk menambahkan data baru.
             </div>
         @else
             <div class="table-responsive">
@@ -51,34 +51,32 @@
                             <th>No</th>
                             <th>Kode Produk</th>
                             <th>Nama Produk</th>
-                            <th>Tipe Transaksi</th>
-                            <th>Qty</th>
-                            <th>Keterangan</th>
-                            <th>Tanggal & Waktu</th>
+                            <th>Kategori</th>
+                            <th>Harga Beli</th>
+                            <th>Harga Jual</th>
+                            <th>Supplier</th>
+                            <th>Satuan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($transactions as $key => $transaction)
+                        @foreach($products as $key => $product)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td><strong>{{ $transaction->product_code }}</strong></td>
-                            <td>{{ $transaction->product_name }}</td>
+                            <td><strong>{{ $product->product_code }}</strong></td>
+                            <td>{{ $product->product_name }}</td>
+                            <td>{{ $product->category }}</td>
+                            <td>Rp {{ number_format($product->purchase_price, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($product->selling_price, 0, ',', '.') }}</td>
                             <td>
-                                @if($transaction->movement_type == 'IN')
-                                    <span class="badge badge-success">IN (Masuk)</span>
-                                @else
-                                    <span class="badge badge-danger">OUT (Keluar)</span>
-                                @endif
+                                <span class="badge badge-info">Supplier #{{ $product->supplier_id }}</span>
                             </td>
-                            <td>{{ $transaction->qty_change }} unit</td>
-                            <td>{{ $transaction->description }}</td>
-                            <td>{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('d-m-Y H:i') }}</td>
+                            <td>{{ $product->unit }}</td>
                             <td>
-                                <a href="{{ route('transactions.edit', $transaction->movement_id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                <a href="{{ route('products.edit', $product->product_id) }}" class="btn btn-sm btn-warning" title="Edit">
                                     <i class="fas fa-pencil-alt"></i> Edit
                                 </a>
-                                <form action="{{ route('transactions.destroy', $transaction->movement_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Apakah Anda yakin?')">
+                                <form action="{{ route('products.destroy', $product->product_id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Apakah Anda yakin?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
