@@ -11,13 +11,17 @@ class Supplier extends Model
     protected $fillable = [
         'sup_kode',
         'sup_nama',
-        'sup_alamat',
         'sup_telp',
-        'sup_email'
+        'sup_email',
+        'sup_alamat'
     ];
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'sup_id', 'sup_id');
+        return $this->hasMany(
+            Product::class,
+            'sup_id',
+            'sup_id'
+        );
     }
 }

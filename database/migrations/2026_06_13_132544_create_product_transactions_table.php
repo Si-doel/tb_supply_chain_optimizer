@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_transactions', function (Blueprint $table) {
+
             $table->id('trx_id');
 
             $table->unsignedBigInteger('prd_id');
@@ -26,9 +27,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('prd_id')
-                ->references('prd_id')
-                ->on('products')
-                ->onDelete('cascade');
+                  ->references('prd_id')
+                  ->on('products')
+                  ->onDelete('cascade');
         });
     }
 
