@@ -2,7 +2,7 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="dashboard" class="logo">
                 <img src="/assets/img/kaiadmin/Logo-Blue.png" alt="BLUE SCM" class="navbar-brand" height="60">
             </a>
             <div class="nav-toggle">
