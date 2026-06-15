@@ -51,35 +51,40 @@
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                         aria-expanded="false">
                         <div class="avatar-sm">
-                            <img src="/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle" />
+                            <img src="/assets/img/scm-logo.png" alt="SCM Logo" class="avatar-img rounded-circle" />
                         </div>
                         <span class="profile-username">
                             <span class="op-7">Hi,</span>
-                            <span class="fw-bold">Hizrian</span>
+                            <span class="fw-bold">{{ auth()->user()->name }}</span>
                         </span>
                     </a>
-                    <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <ul class="dropdown-menu dropdown-user animated fadeIn" style="min-width: 270px;">
                         <div class="dropdown-user-scroll scrollbar-outer">
                             <li>
                                 <div class="user-box">
                                     <div class="avatar-lg">
-                                        <img src="/assets/img/profile.jpg" alt="image profile"
-                                            class="avatar-img rounded" />
+                                        <img src="/assets/img/scm-logo.png" alt="SCM Logo" class="avatar-img rounded" />
                                     </div>
                                     <div class="u-text">
-                                        <h4>Hizrian</h4>
-                                        <p class="text-muted">hello@example.com</p>
-                                        <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View
-                                            Profile</a>
+                                        <h4>{{ auth()->user()->name }}</h4>
+                                        <p class="text-muted">{{ auth()->user()->email }}</p>
+                                        <div class="d-flex gap-2 mt-2">
+                                            <a href="{{ route('profile.edit') }}"
+                                            class="btn btn-secondary btn-sm px-3">
+                                                View Profile
+                                            </a>
+                                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit"
+                                                        class="btn btn-sm px-3"
+                                                        style="border:1px solid #6861CE;color:#6861CE;background:white;">
+                                                    Logout
+                                                </button>
+                                            </form>
+
+                                        </div>
                                     </div>
                                 </div>
-                            </li>
-                            <li>
-                                <div class="dropdown-divider"></div>
-                                    <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Account Setting</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Logout</a>
                             </li>
                         </div>
                     </ul>
