@@ -17,7 +17,7 @@ class TransactionController extends Controller
             ->orderBy('trx_date', 'desc')
             ->get();
 
-        return view('transactions.index', compact('transactions'));
+        return view('Transactions.index', compact('transactions'));
     }
 
     /**
@@ -27,7 +27,7 @@ class TransactionController extends Controller
     {
         $products = Product::orderBy('prd_kode')->get();
 
-        return view('transactions.create', compact('products'));
+        return view('Transactions.create', compact('products'));
     }
 
     /**
@@ -78,7 +78,7 @@ class TransactionController extends Controller
         $transaction = ProductTransaction::findOrFail($id);
         $products    = Product::orderBy('prd_kode')->get();
 
-        return view('transactions.edit', compact('transaction', 'products'));
+        return view('Transactions.edit', compact('transaction', 'products'));
     }
 
     /**
