@@ -52,6 +52,13 @@
 
     <div class="card-body">
 
+        @if (session('success'))
+            <div class="alert alert-success">
+                <i class="fa fa-check-circle"></i>
+                {{ session('success') }}
+            </div>
+        @endif
+
         @if($products->isEmpty())
 
             <div class="alert alert-info">
