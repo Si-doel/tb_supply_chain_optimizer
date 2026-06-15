@@ -5,6 +5,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReorderRecommendationController;
+use App\Http\Controllers\ReorderDraftController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -46,13 +48,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/transactions/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 
     // Reorder Management
-    Route::get('/reorder/recommendations', function () {
-        return view('reorder.recommendations');
-    })->name('reorder.recommendations');
+    Route::get(
+        '/reorder/recommendations',
+        [ReorderRecommendationController::class, 'index']
+    )->name('reorder.recommendations');
 
-    Route::get('/reorder/drafts', function () {
-        return view('reorder.drafts');
-    })->name('reorder.drafts');
+    Route::post(
+        '/reorder-drafts/generate',
+        [ReorderDraftController::class, 'generate']
+    )->name('reorder.drafts.generate');
+
+    Route::get(
+        '/reorder/drafts',
+        [ReorderDraftController::class, 'index']
+    )->name('reorder.drafts');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
