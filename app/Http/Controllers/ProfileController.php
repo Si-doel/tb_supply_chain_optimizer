@@ -57,4 +57,22 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function uploadPhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $user = auth()->user();
+
+        $path = $request->file('photo')->store('profiles', 'public');
+
+        $user->update([
+            'photo' => $path,
+        ]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui');
+    }
+                                                                                                                                                                     
 }

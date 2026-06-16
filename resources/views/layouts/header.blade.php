@@ -51,7 +51,11 @@
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                         aria-expanded="false">
                         <div class="avatar-sm">
-                            <img src="/assets/img/scm-logo.png" alt="SCM Logo" class="avatar-img rounded-circle" />
+                            <img src="{{ auth()->user()->photo
+                                ? \Illuminate\Support\Facades\Storage::url(auth()->user()->photo)
+                                : asset('assets/img/scm-logo.png') }}"
+                                alt="Profile"
+                                class="avatar-img rounded-circle" />
                         </div>
                         <span class="profile-username">
                             <span class="op-7">Hi,</span>
@@ -63,12 +67,16 @@
                             <li>
                                 <div class="user-box">
                                     <div class="avatar-lg">
-                                        <img src="/assets/img/scm-logo.png" alt="SCM Logo" class="avatar-img rounded" />
+                                        <img src="{{ auth()->user()->photo
+                                            ? \Illuminate\Support\Facades\Storage::url(auth()->user()->photo)
+                                            : asset('assets/img/scm-logo.png') }}"
+                                            alt="Profile"
+                                            class="avatar-img rounded-circle" />
                                     </div>
                                     <div class="u-text">
-                                        <h4>{{ auth()->user()->name }}</h4>
-                                        <p class="text-muted">{{ auth()->user()->email }}</p>
-                                        <div class="d-flex gap-2 mt-2">
+                                        <h5 class="mb-1">{{ auth()->user()->name }}</h5>
+                                        <p class="text-muted mb-2">{{ auth()->user()->email }}</p>
+                                        <div class="d-flex gap-2 mt-1">
                                             <a href="{{ route('profile.edit') }}"
                                             class="btn btn-secondary btn-sm px-3">
                                                 View Profile
