@@ -18,21 +18,53 @@ class ReorderDraftController extends Controller
             'product',
             'supplier'
         ])
-        ->orderBy('rod_id', 'desc')
-        ->get();
+            ->orderBy('sup_id')
+            ->orderBy('prd_id')
+            ->get();
+
+        $draftsBySupplier = $drafts->groupBy('sup_id');
+
+        $totalSuppliers = $drafts
+            ->pluck('sup_id')
+            ->unique()
+            ->count();
+
+        $totalItems = $drafts->count();
+
+        $totalQty = $drafts->sum('rod_qty');
 
         return view(
             'reorder.drafts',
-            compact('drafts')
+            compact(
+                'drafts',
+                'draftsBySupplier',
+                'totalSuppliers',
+                'totalItems',
+                'totalQty'
+            )
         );
     }
 
     /**
      * Generate reorder drafts from recommendations.
      */
-    public function generate(): RedirectResponse
+    public function generate()
     {
-        // Hapus draft lama agar tidak duplicate
+        $todayDraftExists = ReorderDraft::whereDate(
+            'created_at',
+            today()
+        )->exists();
+
+        if ($todayDraftExists) {
+
+            return redirect()
+                ->route('reorder.recommendations')
+                ->with(
+                    'warning',
+                    'Reorder draft has already been generated today.'
+                );
+        }
+
         ReorderDraft::truncate();
 
         $products = Product::whereColumn(
@@ -41,24 +73,28 @@ class ReorderDraftController extends Controller
             'stok_min'
         )->get();
 
+        $generatedCount = 0;
+
         foreach ($products as $product) {
 
             ReorderDraft::create([
-                'prd_id'    => $product->prd_id,
-                'sup_id'    => $product->sup_id,
-                'rod_qty'   => max(
+                'prd_id' => $product->prd_id,
+                'sup_id' => $product->sup_id,
+                'rod_qty' => max(
                     $product->stok_min - $product->prd_stok,
                     0
                 ),
-                'rod_notes' => 'Auto generated from reorder recommendation'
+                'rod_notes' => 'Auto generated'
             ]);
+
+            $generatedCount++;
         }
 
         return redirect()
-            ->route('reorder.drafts')
+            ->route('reorder.recommendations')
             ->with(
                 'success',
-                'Reorder draft generated successfully.'
+                $generatedCount . ' reorder draft(s) created successfully.'
             );
     }
 }
