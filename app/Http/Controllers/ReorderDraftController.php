@@ -6,6 +6,9 @@ use App\Models\Product;
 use App\Models\ReorderDraft;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Exports\ReorderDraftExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReorderDraftController extends Controller
 {
@@ -96,5 +99,54 @@ class ReorderDraftController extends Controller
                 'success',
                 $generatedCount . ' reorder draft(s) created successfully.'
             );
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(
+            new ReorderDraftExport(),
+            'reorder_draft_' . now()->format('Ymd_His') . '.xlsx'
+        );
+    }
+
+    public function exportPdf($supplierId)
+    {
+        $drafts = ReorderDraft::with([
+            'product',
+            'supplier'
+        ])
+            ->where('sup_id', $supplierId)
+            ->get();
+
+        $pdf = Pdf::loadView(
+            'reorder.pdf',
+            compact('drafts')
+        );
+
+        return $pdf->download(
+            'reorder_supplier_' . $supplierId . '.pdf'
+        );
+    }
+
+    public function exportPdfAll()
+    {
+        $drafts = ReorderDraft::with([
+            'product',
+            'supplier'
+        ])
+            ->orderBy('sup_id')
+            ->orderBy('rod_id')
+            ->get();
+
+        $draftsBySupplier = $drafts->groupBy('sup_id');
+
+        $pdf = Pdf::loadView(
+            'reorder.pdf-all',
+            compact('draftsBySupplier')
+        );
+
+        return $pdf->download(
+            'reorder_draft_all_supplier.pdf'
+        );
     }
 }

@@ -14,14 +14,14 @@
                 </small>
             </div>
             <div>
-                <button class="btn btn-success btn-sm" disabled>
+                <a href="{{ route('reorder.drafts.export.excel') }}" class="btn btn-success btn-sm">
                     <i class="fas fa-file-excel"></i>
                     Export Excel
-                </button>
-                <button class="btn btn-danger btn-sm" disabled>
+                </a>
+                <a href="{{ route('reorder.drafts.export.pdf.all') }}" class="btn btn-danger btn-sm">
                     <i class="fas fa-file-pdf"></i>
                     Export PDF
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -96,6 +96,13 @@
                                     <small class="text-muted">
                                         {{ $supplierDrafts->count() }} products ready for reorder
                                     </small>
+                                </div>
+                                <div class="text-end">
+                                    <a href="{{ route('reorder.drafts.export.pdf', $supplierId) }}"
+                                        class="btn btn-danger btn-sm px-3 py-2 mr-1">
+                                        <i class="fas fa-file-pdf"></i>
+                                        Print to PDF
+                                    </a>
                                 </div>
                                 {{-- <div class="text-end">
     <span class="badge badge-primary px-3 py-2 mr-1">

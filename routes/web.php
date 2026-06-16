@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/photo', [ProfileController::class, 'uploadPhoto'])
-    ->name('profile.photo');
+        ->name('profile.photo');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -64,6 +64,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         '/reorder/drafts',
         [ReorderDraftController::class, 'index']
     )->name('reorder.drafts');
+
+    Route::get(
+        '/reorder-drafts/export/excel',
+        [ReorderDraftController::class, 'exportExcel']
+    )->name('reorder.drafts.export.excel');
+
+    Route::get(
+        '/reorder-drafts/export/pdf/{supplier}',
+        [ReorderDraftController::class, 'exportPdf']
+    )->name('reorder.drafts.export.pdf');
+
+    Route::get(
+    '/reorder-drafts/export/pdf-all',
+    [ReorderDraftController::class, 'exportPdfAll']
+)->name('reorder.drafts.export.pdf.all');
 });
 
 require __DIR__ . '/auth.php';
