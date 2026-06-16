@@ -15,7 +15,7 @@ class ReorderRecommendationController extends Controller
                 'stok_min'
             )
             ->orderBy('prd_stok', 'asc')
-            ->paginate(7);
+            ->paginate(10);
 
         $reorderCount = $products->total();
 
