@@ -80,6 +80,8 @@
                             <th>Supplier</th>
                             <th>Current Stock</th>
                             <th>Minimum Stock</th>
+                            <th>Mean</th>
+                            <th>DSI</th>
                             <th>Status</th>
                             <th width="150">Action</th>
                         </tr>
@@ -118,17 +120,31 @@
                             </td>
 
                             <td>
+                                {{ $product->mean }}
+                            </td>
 
-                                @if($product->prd_stok <= $product->stok_min)
+                            <td>
+                                {{ $product->dsi }}
+                            </td>
+
+                            <td>
+
+                                @if($product->inventory_status == 'Overstock')
+
+                                    <span class="badge badge-warning">
+                                        Overstock
+                                    </span>
+
+                                @elseif($product->inventory_status == 'Stockout')
 
                                     <span class="badge badge-danger">
-                                        Reorder Needed
+                                        Stockout
                                     </span>
 
                                 @else
 
                                     <span class="badge badge-success">
-                                        In Stock
+                                        Normal
                                     </span>
 
                                 @endif
