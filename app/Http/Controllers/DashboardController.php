@@ -23,20 +23,40 @@ class DashboardController extends Controller
             'stok_min'
         )->count();
 
+        $safeProductCount = Product::whereColumn(
+            'prd_stok',
+            '>',
+            'stok_min'
+        )->count();
+
+        $reorderRate = $productCount > 0
+            ? round(($reorderCount / $productCount) * 100, 1)
+            : 0;
+
+        $recentTransactions = ProductTransaction::with('product')
+            ->orderBy('trx_date', 'desc')
+            ->orderBy('trx_id', 'desc')
+            ->limit(6)
+            ->get();
+
         $reorderProducts = Product::whereColumn(
             'prd_stok',
             '<=',
             'stok_min'
-        )->get();
-
-        $reorderCount = $reorderProducts->count();
+        )
+            ->orderBy('updated_at', 'asc')
+            ->limit(5)
+            ->get();
 
         return view('Pages.index', compact(
             'supplierCount',
             'productCount',
             'transactionCount',
             'reorderCount',
-            'reorderProducts'
+            'recentTransactions',
+            'reorderProducts',
+            'safeProductCount',
+            'reorderRate'
         ));
     }
 }

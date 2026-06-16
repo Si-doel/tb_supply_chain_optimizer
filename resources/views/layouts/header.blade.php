@@ -54,8 +54,7 @@
                             <img src="{{ auth()->user()->photo
                                 ? \Illuminate\Support\Facades\Storage::url(auth()->user()->photo)
                                 : asset('assets/img/scm-logo.png') }}"
-                                alt="Profile"
-                                class="avatar-img rounded-circle" />
+                                alt="Profile" class="avatar-img rounded-circle" />
                         </div>
                         <span class="profile-username">
                             <span class="op-7">Hi,</span>
@@ -70,26 +69,21 @@
                                         <img src="{{ auth()->user()->photo
                                             ? \Illuminate\Support\Facades\Storage::url(auth()->user()->photo)
                                             : asset('assets/img/scm-logo.png') }}"
-                                            alt="Profile"
-                                            class="avatar-img rounded-circle" />
+                                            alt="Profile" class="avatar-img rounded-circle" />
                                     </div>
                                     <div class="u-text">
                                         <h5 class="mb-1">{{ auth()->user()->name }}</h5>
                                         <p class="text-muted mb-2">{{ auth()->user()->email }}</p>
-                                        <div class="d-flex gap-2 mt-1">
-                                            <a href="{{ route('profile.edit') }}"
-                                            class="btn btn-secondary btn-sm px-3">
+                                        <div class="d-flex align-items-center gap-2 mt-2">
+                                            <a href="{{ route('profile.edit') }}" class="btn btn-secondary btn-sm px-3">
                                                 View Profile
                                             </a>
-                                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                            <form action="{{ route('logout') }}" method="POST" class="m-0">
                                                 @csrf
-                                                <button type="submit"
-                                                        class="btn btn-sm px-3"
-                                                        style="border:1px solid #6861CE;color:#6861CE;background:white;">
+                                                <button type="submit" class="btn btn-outline-secondary btn-sm px-3">
                                                     Logout
                                                 </button>
                                             </form>
-
                                         </div>
                                     </div>
                                 </div>
