@@ -113,6 +113,18 @@
 
                 <div class="col-md-3">
                     <div class="form-group">
+                        <label>HPP</label>
+                        <input type="number"
+                            name="hpp"
+                            class="form-control"
+                            value="{{ $product->hpp }}"
+                            min="0"
+                            required>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
                         <label for="stok_min">Minimum Stock <span class="text-danger">*</span></label>
                         <input type="number" id="stok_min" name="stok_min"
                                class="form-control @error('stok_min') is-invalid @enderror"

@@ -126,6 +126,17 @@
                 </div>
             </div>
 
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>HPP</label>
+                    <input type="number"
+                        name="hpp"
+                        class="form-control"
+                        min="0"
+                        required>
+                </div>
+            </div>
+
             <div class="form-group d-flex gap-2">
                 <button type="submit" class="btn btn-success">
                     <i class="fas fa-save"></i> Save

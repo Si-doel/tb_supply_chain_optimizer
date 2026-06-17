@@ -41,6 +41,7 @@ class ProductController extends Controller
             'sup_id'   => 'required|exists:suppliers,sup_id',
             'prd_stok' => 'required|integer|min:0',
             'stok_min' => 'required|integer|min:0',
+            'hpp'      => 'required|numeric|min:0',
         ]);
 
         Product::create($validated);
@@ -74,6 +75,7 @@ class ProductController extends Controller
             'sup_id'   => 'required|exists:suppliers,sup_id',
             'prd_stok' => 'required|integer|min:0',
             'stok_min' => 'required|integer|min:0',
+            'hpp'      => 'required|numeric|min:0',
         ]);
 
         $product->update($validated);

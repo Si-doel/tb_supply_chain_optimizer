@@ -15,6 +15,7 @@ class Product extends Model
         'prd_nama',
         'prd_stok',
         'stok_min',
+        'hpp',
     ];
 
     public function supplier()
@@ -72,4 +73,10 @@ class Product extends Model
         return 'Normal';
     }
 
+    public function getInventoryValueAttribute()
+    {
+        return $this->prd_stok * $this->hpp;
+    }
+
 }
+

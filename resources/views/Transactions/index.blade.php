@@ -67,6 +67,7 @@
                                 <th>Product Name</th>
                                 <th>Type</th>
                                 <th>Quantity</th>
+                                <th>Total</th>
                                 <th>Notes</th>
                                 <th style="width:100px;">Action</th>
                             </tr>
@@ -99,11 +100,11 @@
 
                                         @if ($transaction->trx_type == 'IN')
                                             <span class="badge badge-success">
-                                                Stock In
+                                                In
                                             </span>
                                         @else
                                             <span class="badge badge-danger">
-                                                Stock Out
+                                                Out
                                             </span>
                                         @endif
 
@@ -111,6 +112,10 @@
 
                                     <td>
                                         {{ number_format($transaction->trx_qty) }}
+                                    </td>
+
+                                    <td>
+                                        Rp {{ number_format($transaction->trx_qty * $transaction->product->hpp, 0, ',', '.') }}
                                     </td>
 
                                     <td style="max-width:250px;">

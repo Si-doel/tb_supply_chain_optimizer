@@ -90,7 +90,7 @@
                                                 {{ $product->stok_min }}
                                             </td>
                                             <td class="text-center">
-                                                {{ max($product->stok_min - $product->prd_stok, 0) }}
+                                                {{ max($product->stok_min*2 - $product->prd_stok, 0) }}
                                             </td>
                                             <td class="text-center">
                                                 @if ($product->prd_stok == 0)
