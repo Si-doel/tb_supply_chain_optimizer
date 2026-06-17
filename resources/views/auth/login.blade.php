@@ -2,6 +2,16 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <div class="text-center mb-6">
+        <h2 class="text-3xl font-bold">
+            Welcome Back 👋
+        </h2>
+
+        <p class="text-gray-500 mt-2">
+            Sign in to continue
+        </p>
+    </div>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -27,14 +37,14 @@
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+                <input id="remember_me" type="checkbox" name="remember">
+                <span class="remember-text">{{ __('Remember me') }}</span>
             </label>
         </div>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
+                <a class="underline tetext-sm font-medium text-blue-600 hover:text-blue-800" href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
@@ -43,5 +53,19 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+
+        <div class="text-center mt-6">
+
+            <span class="text-sm text-gray-500">
+                Don't have an account?
+            </span>
+
+            <a href="{{ route('register') }}"
+            class="text-blue-600 font-semibold">
+                Register here
+            </a>
+
+        </div>
+
     </form>
 </x-guest-layout>
