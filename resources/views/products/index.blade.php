@@ -78,8 +78,10 @@
                             <th>Product Code</th>
                             <th>Product Name</th>
                             <th>Supplier</th>
-                            <th>Current Stock</th>
                             <th>Minimum Stock</th>
+                            <th>Current Stock</th>
+                            <th>HPP</th>
+                            <th>Inventory Value</th>
                             <th>Mean</th>
                             <th>DSI</th>
                             <th>Status</th>
@@ -112,11 +114,19 @@
                             </td>
 
                             <td>
+                                {{ $product->stok_min }}
+                            </td>
+
+                            <td>
                                 {{ $product->prd_stok }}
                             </td>
 
                             <td>
-                                {{ $product->stok_min }}
+                                Rp {{ number_format($product->hpp, 0, ',', '.') }}
+                            </td>
+
+                            <td>
+                                Rp {{ number_format($product->inventory_value, 0, ',', '.') }}
                             </td>
 
                             <td>
