@@ -1,29 +1,273 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
+@section('page.header')
+<div class="page-header">
+    <h4 class="page-title">Profile</h4>
+</div>
+@endsection
+
+@section('content')
+<div class="row">                                                                       
+    <div class="col-md-6">
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Informasi Profil</h4>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+            <div class="card-body">
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+            <form action="{{ route('profile.photo') }}"
+                    method="POST"
+                    enctype="multipart/form-data">
+
+                    @csrf
+
+                    <div class="text-center mb-4">
+
+                        <img src="{{ auth()->user()->photo
+                            ? asset('storage/' . auth()->user()->photo)
+                            : asset('assets/img/scm-logo.png') }}"
+                            alt="Profile"
+                            id="profile-photo-preview"
+                            class="rounded-circle border"
+                            width="120"
+                            height="120"
+                            style="object-fit: cover;"
+                            onerror="this.onerror=null; this.src='{{ asset('assets/img/scm-logo.png') }}'">
+
+                        <br><br>
+
+                        <input type="file"
+                            id="photo"
+                            name="photo"
+                            accept="image/*"
+                            style="display:none;"
+                            onchange="this.form.submit()">
+
+                        <label for="photo"
+                            class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-camera me-1"></i>
+                            Ubah
+                        </label>
+
+                        @if(auth()->user()->photo)
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmRemovePhotoModal">
+                            <i class="fas fa-trash me-1"></i>
+                            Hapus Foto
+                        </button>
+                        @endif
+
+                    </div>
+
+                </form>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Nama</label>
+                    <p class="form-control-plaintext border rounded p-2 bg-light">
+                        {{ auth()->user()->name }}
+                    </p>
                 </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Email</label>
+                    <p class="form-control-plaintext border rounded p-2 bg-light">
+                        {{ auth()->user()->email }}
+                    </p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Role</label>
+                    <input type="text"
+                        class="form-control"
+                        value="{{ auth()->user()->role }}"
+                        readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Status</label>
+                    <input type="text"
+                        class="form-control"
+                        value="Active"
+                        readonly>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editProfileModal">
+                        <i class="fas fa-user-edit me-1"></i>
+                        Edit Profile
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#changePasswordModal">
+                        <i class="fas fa-key me-1"></i>
+                        Change Password
+                    </button>
+                </div>
+
             </div>
         </div>
+
     </div>
-</x-app-layout>
+</div>
+
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form method="POST" action="{{ route('profile.update') }}">
+                @csrf
+                @method('PATCH')
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Profile</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label>Nama</label>
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               value="{{ auth()->user()->name }}"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               value="{{ auth()->user()->email }}"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit"
+                            class="btn btn-secondary">
+                        Simpan
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form method="POST" action="{{ route('password.update') }}">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Password</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label>Password Lama</label>
+                        <input type="password"
+                               name="current_password"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Password Baru</label>
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Konfirmasi Password</label>
+                        <input type="password"
+                               name="password_confirmation"
+                               class="form-control"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit"
+                            class="btn btn-secondary">
+                        Update Password
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{{-- Modal Konfirmasi Hapus Foto --}}
+@if(auth()->user()->photo)
+<div class="modal fade" id="confirmRemovePhotoModal" tabindex="-1" aria-labelledby="confirmRemovePhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title text-danger" id="confirmRemovePhotoModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Hapus Foto Profil
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center py-4">
+                <img src="{{ asset('storage/' . auth()->user()->photo) }}"
+                     alt="Foto saat ini"
+                     class="rounded-circle border mb-3"
+                     width="90" height="90"
+                     style="object-fit: cover;">
+                <p class="mb-1 fw-semibold">Yakin ingin menghapus foto profil ini?</p>
+                <p class="text-muted small">Foto akan kembali ke gambar default.</p>
+            </div>
+
+            <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>
+                    Batal
+                </button>
+
+                <form action="{{ route('profile.photo.remove') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>
+                        Ya, Hapus
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endif
+
+@endsection

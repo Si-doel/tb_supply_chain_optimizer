@@ -1,0 +1,181 @@
+#calendar {
+    padding: 10px;
+}
+
+/* Header bulan */
+.fc .fc-toolbar-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1572e8;
+}
+
+/* Tombol */
+.fc .fc-button {
+    background-color: #1572e8 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+}
+
+/* Hover tombol */
+.fc .fc-button:hover {
+    background-color: #0d5ec9 !important;
+}
+
+/* Hari ini */
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: rgba(21, 114, 232, 0.15) !important;
+    border-radius: 10px;
+}
+
+/* Header nama hari */
+.fc-col-header-cell {
+    background: #f5f7fb;
+    padding: 10px 0;
+}
+
+/* Angka tanggal */
+.fc-daygrid-day-number {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Border calendar */
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border-color: #ececec;
+}
+
+/* Card */
+.card-chart {
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================
+   WELCOME CARD
+========================= */
+
+.welcome-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.welcome-text {
+    opacity: 0.9;
+}
+
+.welcome-icon {
+    font-size: 3rem;
+    opacity: 0.1;
+    color: #fff;
+}
+
+/* =========================
+   KPI DASHBOARD CARD
+========================= */
+
+.dashboard-stat-card {
+    border-radius: 18px;
+    border: none;
+
+    transition: all 0.3s ease;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: 0 10px 25px rgba(
+        0,
+        0,
+        0,
+        0.08
+    );
+}
+
+/* Judul KPI */
+.dashboard-stat-card .card-title {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+/* Angka KPI */
+.dashboard-stat-card .h2 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #212529;
+}
+
+
+/* =========================
+   KPI ICON
+========================= */
+
+.icon-shape {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+}
+
+/* Paksa semua icon center */
+.icon-shape i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    font-size: 22px;
+    line-height: 1;
+}
+
+
+/* =========================
+   KPI COLOR OVERRIDE
+========================= */
+
+.bg-primary {
+    background: #1572e8 !important;
+}
+
+.bg-success {
+    background: #31ce36 !important;
+}
+
+.bg-warning {
+    background: #ffad46 !important;
+}
+
+.bg-danger {
+    background: #f25961 !important;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .welcome-card .card-body {
+        text-align: center;
+    }
+
+    .welcome-icon {
+        display: none;
+    }
+
+    .dashboard-stat-card {
+        margin-bottom: 15px;
+    }
+}
+
