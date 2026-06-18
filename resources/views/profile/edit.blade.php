@@ -29,10 +29,12 @@
                             ? asset('storage/' . auth()->user()->photo)
                             : asset('assets/img/scm-logo.png') }}"
                             alt="Profile"
+                            id="profile-photo-preview"
                             class="rounded-circle border"
                             width="120"
                             height="120"
-                            style="object-fit: cover;">
+                            style="object-fit: cover;"
+                            onerror="this.onerror=null; this.src='{{ asset('assets/img/scm-logo.png') }}'">
 
                         <br><br>
 
@@ -48,6 +50,16 @@
                             <i class="fas fa-camera me-1"></i>
                             Ubah
                         </label>
+
+                        @if(auth()->user()->photo)
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmRemovePhotoModal">
+                            <i class="fas fa-trash me-1"></i>
+                            Hapus Foto
+                        </button>
+                        @endif
 
                     </div>
 
@@ -210,5 +222,52 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Konfirmasi Hapus Foto --}}
+@if(auth()->user()->photo)
+<div class="modal fade" id="confirmRemovePhotoModal" tabindex="-1" aria-labelledby="confirmRemovePhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title text-danger" id="confirmRemovePhotoModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Hapus Foto Profil
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center py-4">
+                <img src="{{ asset('storage/' . auth()->user()->photo) }}"
+                     alt="Foto saat ini"
+                     class="rounded-circle border mb-3"
+                     width="90" height="90"
+                     style="object-fit: cover;">
+                <p class="mb-1 fw-semibold">Yakin ingin menghapus foto profil ini?</p>
+                <p class="text-muted small">Foto akan kembali ke gambar default.</p>
+            </div>
+
+            <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>
+                    Batal
+                </button>
+
+                <form action="{{ route('profile.photo.remove') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>
+                        Ya, Hapus
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection
