@@ -104,15 +104,6 @@
                                         Print to PDF
                                     </a>
                                 </div>
-                                {{-- <div class="text-end">
-    <span class="badge badge-primary px-3 py-2 mr-1">
-        {{ $supplierDrafts->count() }} Products
-    </span>
-
-    <span class="badge badge-success px-3 py-2">
-        Qty : {{ $supplierDrafts->sum('rod_qty') }}
-    </span>
-</div> --}}
                             </div>
                         </div>
                         <div class="card-body">
