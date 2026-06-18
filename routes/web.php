@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/photo', [ProfileController::class, 'uploadPhoto'])
         ->name('profile.photo');
+    Route::delete('/profile/photo', [ProfileController::class, 'removePhoto'])
+        ->name('profile.photo.remove');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>KELOMPOK4 - TB SUPPLY CHAIN OPTIMIZER</title>
+    <title>KELOMPOK 4 - TB BLUE SUPPLY CHAIN OPTIMIZER</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="/assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
 
@@ -23,7 +23,7 @@
                 ],
                 urls: ["/assets/css/fonts.min.css"],
             },
-            active: function() {
+            active: function () {
                 sessionStorage.fonts = true;
             },
         });

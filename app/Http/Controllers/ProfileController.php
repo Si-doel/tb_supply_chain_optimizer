@@ -74,5 +74,17 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Foto profil berhasil diperbarui');
     }
+
+    public function removePhoto(Request $request): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if ($user->photo) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo);
+            $user->update(['photo' => null]);
+        }
+
+        return back()->with('success', 'Foto profil berhasil dihapus');
+    }
                                                                                                                                                                      
 }
