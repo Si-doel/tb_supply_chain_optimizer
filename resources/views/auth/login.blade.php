@@ -33,8 +33,7 @@
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
-
-        <div class="flex items-center justify-end mt-4">
+       <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
                 <a class="underline tetext-sm font-medium text-blue-600 hover:text-blue-800" href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
