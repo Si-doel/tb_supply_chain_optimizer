@@ -39,16 +39,33 @@
 
 <body>
     @foreach ($draftsBySupplier as $supplierDrafts)
-        <h2 style="text-align:center;">
+        <h2 style="text-align:center; margin-bottom:20px;">
             REORDER RECOMMENDATION REPORT
         </h2>
-        <p style="text-align:center;">
-            Generated :
-            {{ now()->format('d M Y H:i') }}
-        </p>
+
         <table style="border:none; margin-bottom:15px;">
             <tr>
-                <td style="border:none; width:150px;">
+                <td style="border:none; width:200px;">
+                    Printed At
+                </td>
+                <td style="border:none;">
+                    :
+                    {{ now()->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:none;">
+                    Generated date
+                </td>
+                <td style="border:none;">
+                    :
+                    {{ $supplierDrafts->first()->created_at->format('d M Y') }}
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:none;">
                     Supplier Name
                 </td>
                 <td style="border:none;">
@@ -56,6 +73,7 @@
                     {{ $supplierDrafts->first()->supplier->sup_nama }}
                 </td>
             </tr>
+
             <tr>
                 <td style="border:none;">
                     Supplier Code
@@ -88,7 +106,7 @@
                         <td>
                             {{ $draft->product->prd_nama }}
                         </td>
-                        <td>
+                        <td style="text-align:center;">
                             {{ $draft->rod_qty }}
                         </td>
                     </tr>
@@ -99,18 +117,16 @@
                     <th colspan="3" style="text-align:right;">
                         Total Quantity
                     </th>
-                    <th>
-                        {{ $supplierDrafts->sum('rod_qty') }}
+                    <th style="text-align:center;">
+                        {{ number_format($supplierDrafts->sum('rod_qty')) }}
                     </th>
                 </tr>
             </tfoot>
         </table>
-
         @if (!$loop->last)
             <div class="page-break"></div>
         @endif
     @endforeach
-
 </body>
 
 </html>
