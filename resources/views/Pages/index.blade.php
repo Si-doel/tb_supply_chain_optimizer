@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <div class="row align-items-stretch">
+    <div class="row align-items-start">
         <div class="col-md-4">
             <div class="card h-100">
                 <div class="card">
@@ -199,51 +199,62 @@
 
 
         <div class="col-md-8">
-            <div class="card h-100">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">
-                            Recent Transactions
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Type</th>
-                                    <th>Qty</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($recentTransactions as $transaction)
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">
+                        Reorder Recommendations
+                        <small class="text-muted fw-normal" style="font-size:0.75rem;">(top 5)</small>
+                    </h4>
+                    <a href="{{ route('reorder.recommendations') }}" class="btn btn-sm btn-outline-danger">
+                        View All
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if ($reorderProducts->isEmpty())
+                        <div class="alert alert-success mb-0">
+                            <i class="fa fa-check-circle me-1"></i>
+                            All products are above minimum stock level.
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            {{ $transaction->product->prd_nama }}
-                                        </td>
-                                        <td>
-                                            @if ($transaction->trx_type == 'IN')
-                                                <span class="badge badge-success">
-                                                    IN
-                                                </span>
-                                            @else
-                                                <span class="badge badge-danger">
-                                                    OUT
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $transaction->trx_qty }}
-                                        </td>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($transaction->trx_date)->format('d M Y') }}
-                                        </td>
+                                        <th>Product Code</th>
+                                        <th>Product Name</th>
+                                        <th>Current Stock</th>
+                                        <th>Minimum Stock</th>
+                                        <th>Status</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    @foreach ($reorderProducts as $product)
+                                        <tr>
+                                            <td>{{ $product->prd_kode }}</td>
+                                            <td>{{ $product->prd_nama }}</td>
+                                            <td class="text-danger fw-bold">{{ $product->prd_stok }}</td>
+                                            <td>{{ $product->stok_min }}</td>
+                                            <td>
+                                                <span class="badge badge-danger">
+                                                    Reorder Required
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @if ($reorderCount > 5)
+                            <div class="text-center mt-3">
+                                <small class="text-muted">
+                                    Showing 5 of {{ $reorderCount }} products that need reorder.
+                                </small>
+                                <a href="{{ route('reorder.recommendations') }}" class="d-block mt-1 text-danger">
+                                    View all {{ $reorderCount }} recommendations &rarr;
+                                </a>
+                            </div>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
@@ -253,44 +264,48 @@
     <div class="card mt-4">
         <div class="card-header">
             <h4 class="card-title">
-                Reorder Recommendations
+                Recent Transactions
             </h4>
         </div>
         <div class="card-body">
-            @if ($reorderProducts->isEmpty())
-                <div class="alert alert-success mb-0">
-                    All products are above minimum stock level.
-                </div>
-            @else
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Type</th>
+                            <th>Qty</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($recentTransactions as $transaction)
                             <tr>
-                                <th>Product Code</th>
-                                <th>Product Name</th>
-                                <th>Current Stock</th>
-                                <th>Minimum Stock</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($reorderProducts as $product)
-                                <tr>
-                                    <td>{{ $product->prd_kode }}</td>
-                                    <td>{{ $product->prd_nama }}</td>
-                                    <td>{{ $product->prd_stok }}</td>
-                                    <td>{{ $product->stok_min }}</td>
-                                    <td>
-                                        <span class="badge badge-danger">
-                                            Reorder Required
+                                <td>
+                                    {{ $transaction->product->prd_nama }}
+                                </td>
+                                <td>
+                                    @if ($transaction->trx_type == 'IN')
+                                        <span class="badge badge-success">
+                                            IN
                                         </span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+                                    @else
+                                        <span class="badge badge-danger">
+                                            OUT
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $transaction->trx_qty }}
+                                </td>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($transaction->trx_date)->format('d M Y') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection
